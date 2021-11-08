@@ -11,8 +11,7 @@ public class Answer {
     private String answer;
 
     static final String SEPARATOR = " | ";
-
-
+    
     private final int questionIndex;
     private boolean isAnswered;
 
@@ -61,6 +60,11 @@ public class Answer {
                 + getQuestionIndex() + '\n';
     }
 
+    /**
+     * Converts an Answer instance into a JSONObject instance.
+     *
+     * @return      Answer instance as a JSONObject instance
+     */
     public JSONObject toJsonObject() {
         JSONObject jsonAnswer = new JSONObject();
 

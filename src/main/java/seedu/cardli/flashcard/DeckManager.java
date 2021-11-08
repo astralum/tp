@@ -1,8 +1,9 @@
 package seedu.cardli.flashcard;
 
-
 import seedu.cardli.exceptions.CardLiException;
 import seedu.cardli.exceptions.DeckNotExistException;
+import seedu.cardli.exceptions.FieldEmptyException;
+import seedu.cardli.exceptions.InvalidCommandFormatException;
 
 import static seedu.cardli.ui.TestUi.DECK_NOT_EXIST_MESSAGE;
 
@@ -12,8 +13,12 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * Implements the class DeckManager, which contains all Decks and
+ * methods to operate on them, such as add, delete, edit, view, etc.
+ */
 public class DeckManager {
+    public static final String DECK_ALREADY_EXISTS_MESSAGE = "The deck you are trying to create already exists.";
     private final ArrayList<Deck> decks;
     private static final Logger logger = Logger.getLogger(Deck.class.getName());
 
@@ -25,7 +30,13 @@ public class DeckManager {
         this.decks = decks;
     }
 
-
+    /**
+     * Returns the details of the transfer that took place as a message.
+     *
+     * @param parameters string array containing the destination deck index, current deck index, card index.
+     * @return the details of the transfer that took place as a message.
+     * @throws CardLiException If card does not exist.
+     */
     public String moveCard(String[] parameters) throws CardLiException {
         String enteredCurrentDeckIndex = parameters[0];
         int currentDeckIndex = Integer.parseInt(enteredCurrentDeckIndex);
@@ -44,7 +55,12 @@ public class DeckManager {
         return ("Moved card " + enteredCardIndex + " to " + "deck " + enteredDeckIndex);
     }
 
-
+    /**
+     * Returns the details of the edit that took place as a message.
+     *
+     * @param args string array containing the  deck index and name.
+     * @return the details of the transfer that took place as a message.
+     */
     public String editDeck(String[] args) {
         String enteredDeckIndex = args[0];
         int deckIndex = Integer.parseInt(enteredDeckIndex) - 1;
@@ -53,13 +69,12 @@ public class DeckManager {
         return ("Changed deck " + enteredDeckIndex + " to " + deckName);
     }
 
-
     public String prepareToAddDeck(String deckName) {
         if (!hasDeck(deckName)) {
             addDeck(deckName);
             return printNewDeck(deckName);
         } else {
-            return ("The category you are trying to create already exists.");
+            return DECK_ALREADY_EXISTS_MESSAGE;
         }
     }
 
@@ -105,7 +120,6 @@ public class DeckManager {
         return result;
     }
 
-
     public String findCards(String searchInput) {
         String result = "";
         if (decks.size() > 0) {
@@ -120,6 +134,16 @@ public class DeckManager {
             result = "There are no cards matching the search term.";
         }
         return result;
+    }
+
+    public String cardHasSameName(String query) {
+        String deckWithSameNameCard = "";
+        for (Deck d : decks) {
+            if (d.hasCardWithSameName(query)) {
+                deckWithSameNameCard = d.getName();
+            }
+        }
+        return deckWithSameNameCard;
     }
 
     public String viewDecks() {
@@ -137,7 +161,6 @@ public class DeckManager {
         }
         return result;
     }
-
 
     /**
      * Gets all the low scoring cards and put them into a deck.

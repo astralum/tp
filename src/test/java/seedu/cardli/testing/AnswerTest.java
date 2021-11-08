@@ -1,4 +1,4 @@
-package seedu.cardli;
+package seedu.cardli.testing;
 
 import org.junit.jupiter.api.Test;
 import seedu.cardli.testing.Answer;
@@ -31,6 +31,20 @@ public class AnswerTest {
         Answer answer = new Answer("", 1,true);
         answer.setAnswer("testAnswer");
         assertEquals("testAnswer", answer.getAnswer());
+    }
+
+    //@@author xRossKoh
+    @Test
+    public void testToString() {
+        Answer answer = new Answer("testAnswer", 1,true);
+        assertEquals("testAnswer | 1\n", answer.toString());
+    }
+
+    @Test
+    public void testToJsonObject() {
+        Answer answer = new Answer("testAnswer", 1,true);
+        assertEquals("{\"questionIndex\":1,\"answer\":\"testAnswer\"}",
+                answer.toJsonObject().toJSONString());
     }
 
 }

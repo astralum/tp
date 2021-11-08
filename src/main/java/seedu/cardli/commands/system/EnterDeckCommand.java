@@ -37,7 +37,7 @@ public class EnterDeckCommand extends Command {
             }
 
             if (enterInput.contains("-")) {
-                throw new DeckNotExistException("Invalid deck index. Please input a positive integer.");
+                throw new DeckNotExistException("Deck index must be a positive integer smaller than 2147483647.");
             }
 
             if (!Parser.isInteger(enterInput)) {
@@ -58,7 +58,7 @@ public class EnterDeckCommand extends Command {
         } catch (CardLiException e) {
             result = new CommandResult(e.getMessage());
         } catch (NumberFormatException e) {
-            result = new CommandResult("Deck index must be smaller than 2147483647.");
+            result = new CommandResult("Deck index must be a positive integer smaller than 2147483647.");
         }
 
         return result;

@@ -3,7 +3,6 @@ package seedu.cardli.testing;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import seedu.cardli.flashcard.Deck;
-import seedu.cardli.flashcard.FlashCard;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -17,7 +16,6 @@ public class AnswerList {
     private final Deck deck;
     private int userScore;
     private static final Logger logger = Logger.getLogger(Deck.class.getName());
-    private boolean isAllAnswered;
 
     /**
      * AnswerList contains the list of answers from a test and the deck
@@ -29,9 +27,14 @@ public class AnswerList {
         this.answerList = new ArrayList<>();
         this.deck = deck;
         this.userScore = 0;
-        this.isAllAnswered = false;
     }
 
+    /**
+     * Returns true or false regarding if a question is answered.
+     *
+     * @param index the question in the answerList.
+     * @return true or false regarding if a question is answered.
+     */
     public Boolean isQuestionAnswered(int index) {
         Boolean isQuestionAnswered;
         try {
@@ -126,6 +129,11 @@ public class AnswerList {
 
     }
 
+    /**
+     * Converts an AnswerList instance into a JSONObject instance.
+     *
+     * @return      AnswerList instance as a JSONObject instance
+     */
     public JSONObject toJsonObject() {
         JSONObject jsonAnswerList = new JSONObject();
 

@@ -1,4 +1,5 @@
 //@@author JWweiyin
+
 package seedu.cardli.commands.system;
 
 import seedu.cardli.commands.Command;
@@ -9,7 +10,7 @@ import seedu.cardli.parser.system.AddDeckParser;
 
 public class AddDeckCommand extends Command {
 
-    public static final String FIELD_EMPTY_ERROR_MESSAGE = "What is the name of the deck?";
+    public static final String FIELD_EMPTY_ERROR_MESSAGE = "Please input the name of the deck after \"add\".";
 
     private AddDeckParser parser;
     private DeckManager deckManager;

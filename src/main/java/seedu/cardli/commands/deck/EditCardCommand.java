@@ -10,10 +10,15 @@ import seedu.cardli.exceptions.CardLiException;
 import seedu.cardli.exceptions.FieldEmptyException;
 import seedu.cardli.exceptions.InvalidCommandFormatException;
 import seedu.cardli.flashcard.Deck;
+import seedu.cardli.flashcard.DeckManager;
 import seedu.cardli.parser.Parser;
 import seedu.cardli.parser.deck.EditCardParser;
 import seedu.cardli.testing.TestManager;
 
+/**
+ * Implements the EditCardCommand class, which edits the specified side of
+ * the card with the specified index in the given deck.
+ */
 public class EditCardCommand extends Command {
 
     private static final String FIELD_EMPTY_ERROR_MESSAGE = "You cannot leave any field empty! "
@@ -32,14 +37,23 @@ public class EditCardCommand extends Command {
 
     private EditCardParser parser;
     private Deck deck;
+    private DeckManager deckManager;
     private static Logger logger = Logger.getLogger(TestManager.class.getName());
 
-    public EditCardCommand(String arguments, Deck deck) {
+    public EditCardCommand(String arguments, Deck deck, DeckManager deckManager) {
         super("EditCardCommand", arguments);
         this.deck = deck;
         this.parser = new EditCardParser();
+        this.deckManager = deckManager;
     }
 
+    /**
+     * Returns the card index for prepareEditCardCommand as a string.
+     *
+     * @return card index.
+     * @throws NumberFormatException If an integer above 2147483647 is entered by the user as the card index.
+     * @throws CardLiException If a non-integer is given as index, if the card index given is out of bounds.
+     */
     public static String prepareCardIndex(String card, Deck deck) throws CardLiException, NumberFormatException {
         logger.setLevel(Level.WARNING);
         logger.log(Level.INFO, "preparing Card Index");
@@ -58,6 +72,16 @@ public class EditCardCommand extends Command {
         return card;
     }
 
+    /**
+     * Returns the arguments for EditCardCommand if accepted.
+     *
+     * @return accepted arguments.
+     * @throws FieldEmptyException If arguments or flags are empty.
+     * @throws InvalidCommandFormatException If flags are in the wrong position.
+     * @throws NumberFormatException If an integer above 2147483647 is entered by the user as the card index.
+     * @throws CardLiException If flags are used as arguments, if a non-integer is given as index,if front or side are
+     *      not entered as a side.
+     */
     public String[] prepareEditCardCommand() throws CardLiException, NumberFormatException {
         logger.setLevel(Level.WARNING);
         logger.log(Level.INFO, "preparing EditCardCommand");
@@ -81,6 +105,7 @@ public class EditCardCommand extends Command {
         logger.log(Level.INFO, "Splitting the input up");
         // "", card, side, input ///c <> /s <> /i <>
         String[] rawParameters = parser.parseArguments(super.arguments);
+
         logger.log(Level.INFO, "Checking if there is enough arguments");
         if (rawParameters.length != 6) {
             throw new FieldEmptyException(FIELD_EMPTY_ERROR_MESSAGE);
@@ -95,6 +120,15 @@ public class EditCardCommand extends Command {
         String card = rawParameters[1].trim();
         String side = rawParameters[3].trim();
         String input = rawParameters[5].trim();
+
+        if (side.equalsIgnoreCase("front")) {
+            String deckWithSameNameCard = deckManager.cardHasSameName(input);
+            if (!deckWithSameNameCard.isEmpty()) {
+                throw new CardLiException("There is already a card with " + input + " on the front in deck "
+                        + deckWithSameNameCard + ".");
+
+            }
+        }
 
         logger.log(Level.INFO, "Checking if any field is empty");
         if (card.isEmpty() || side.isEmpty() || input.isEmpty()) {
